@@ -1,19 +1,86 @@
 import sys
 import os
+import datetime as dt
+
+# import time as tme
+
+# def fslookup(
+#     fname=None,
+#     sdate=None,
+#     edate=None,
+#     minSize=None,
+#     maxSize=None,
+#     dtype=None,
+#     perms=None,
+#     path=None,
+# ):
+#     print("Performed File Lookup with the followwing params:")
+#     print(locals())
+
+
+# Date functions
+def string2unix(date_string, format_string):
+    date_time = dt.datetime.strptime(date_string, format_string)
+    return int(date_time.timestamp())
 
 
 def fslookup(
+    file_lib,
     fname=None,
     sdate=None,
     edate=None,
-    minSize=None,
     maxSize=None,
+    minSize=None,
     dtype=None,
-    perms=None,
+    perm=None,
     path=None,
 ):
-    print("Performed File Lookup with the followwing params:")
-    print(locals())
+
+    # Dictionary to be appended, returned and printed out
+    search_lib = {"fname": [], "date": [], "size": [], "perm": [], "path": []}
+
+    # moved date functions to parser section -DW
+
+    # fname search
+    for i in range(len(file_lib["fname"])):
+        if fname and file_lib["fname"][i] != fname:
+            continue
+
+        # Date Search
+        accessed_date = file_lib["date"][i]
+        acc_dte2unix = string2unix(accessed_date, dt_format)
+
+        if sdate2unix or edate2unix:
+            if (sdate2unix and acc_dte2unix < sdate2unix) or (
+                edate2unix and acc_dte2unix > edate2unix
+            ):
+                continue
+
+        # dtype search
+        if dtype and file_lib["dtype"][i] != dtype:
+            continue
+
+        # File Size Search
+        size = file_lib["size"][i]
+        if (minSize and size < minSize) or (maxSize and size > maxSize):
+            continue
+
+        # Perm Search
+        if perm and file_lib["perm"][i] != perm:
+            continue
+
+        # Path search
+        if path and file_lib["path"][i] != path:
+            continue
+
+        # Collect file info and compile into search-lib dictionary
+        search_lib["fname"].append(file_lib["fname"][i])
+        search_lib["date"].append(file_lib["date"][i])
+        search_lib["size"].append(file_lib["size"][i])
+        search_lib["perm"].append(file_lib["perm"][i])
+        search_lib["path"].append(file_lib["path"][i])
+
+    return search_lib  # changed back to returning just the list of dicts DW
 
 
 # commands
@@ -36,6 +103,10 @@ for word in cmds:
             case "-d" | "--date":
                 # For now, users must enter date/time requests in perfect
                 # YYYY-MM-DD-HH:MM:SS
+                dt_format = "%Y-%m-%d %H:%M:%S"
+                sdate2unix = string2unix(sdate, dt_format)
+                edate2unix = string2unix(edate, dt_format)
+
                 query["sdate"] = None
                 query["edate"] = None
             case "-s" | "--size":
@@ -87,4 +158,5 @@ for word in cmds:
     if word[0] == "-":
         flag = word
 
-fslookup(**query)
+results = fslookup(**query)
+print(results)
