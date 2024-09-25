@@ -48,12 +48,10 @@ def fslookup(
 
         # Date Search
         accessed_date = file_lib["date"][i]
-        acc_dte2unix = string2unix(accessed_date, dt_format)
+        # acc_dte2unix = string2unix(accessed_date, dt_format)
 
-        if sdate2unix or edate2unix:
-            if (sdate2unix and acc_dte2unix < sdate2unix) or (
-                edate2unix and acc_dte2unix > edate2unix
-            ):
+        if sdate or edate:
+            if (sdate and accessed_date < sdate) or (edate and accessed_date > edate):
                 continue
 
         # dtype search
@@ -102,13 +100,19 @@ for word in cmds:
                 query["fname"] = word
             case "-d" | "--date":
                 # For now, users must enter date/time requests in perfect
-                # YYYY-MM-DD-HH:MM:SS
-                dt_format = "%Y-%m-%d %H:%M:%S"
+                # YYYY-MM-DD-HH:MM:SS~YYYY-MM-DD-HH:MM:SS
+                if word.count("~") != 1:
+                    print(
+                        "Date ranges must be entered as YYYY-MM-DD-HH:MM:SS~YYYY-MM-DD-HH:MM:SS. First or second date may be omitted for open ended search."
+                    )
+                    quit()
+                sdate = word.split()[0]
+                edate = word.split()[1]
+                dt_format = "%Y-%m-%d-%H:%M:%S"
                 sdate2unix = string2unix(sdate, dt_format)
                 edate2unix = string2unix(edate, dt_format)
-
-                query["sdate"] = None
-                query["edate"] = None
+                query["sdate"] = sdate2unix
+                query["edate"] = edate2unix
             case "-s" | "--size":
                 # size should be in slice notation
                 # use bytes, maybe add kb, mb, gb in future
