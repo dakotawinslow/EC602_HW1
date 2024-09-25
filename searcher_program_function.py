@@ -32,8 +32,8 @@ def fslookup(file_lib, fname=None, sdate=None, edate=None, maxSize=None, minSize
         return int(date_time.timestamp())
 
     dt_format = "%Y-%m-%d %H:%M:%S"
-    sdate2unix = string2unix(sdate, dt_format)
-    edate2unix = string2unix(edate, dt_format)
+    sdate2unix = string2unix(sdate, dt_format) if sdate else None
+    edate2unix = string2unix(edate, dt_format) if edate else None
 
     # fname search
     for i in range(len(file_lib['fname'])):
