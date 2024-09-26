@@ -2,7 +2,8 @@
 import sys
 import os
 import datetime as dt
-import database_searcher as ds
+
+# import database_searcher as ds
 
 # import time as tme
 
@@ -115,8 +116,9 @@ cmds = sys.argv
 cmds = cmds[1:] + [""]
 # quit()
 # calling directory object from flattened directory
-library = ds.searcher_obj()
-query = {"file_lib": library}
+# library = ds.searcher_obj()
+# query = {"file_lib": library}
+query = {}
 flag = ""
 if cmds[0][0] != "-":
     query["fname"] = cmds[0]
