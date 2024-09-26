@@ -194,4 +194,5 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
-dict_2_table(results)
+#dict_2_table(results)
+print(results) #fix this Josh
