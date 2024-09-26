@@ -5,20 +5,47 @@ import datetime as dt
 
 # import database_searcher as ds
 
-# import time as tme
+HELPTEXT = """
+Welcome to Searcher! 
+For easiest use, type 'searcher [query]', where query is any combination of alphanumeric characters
+and wildcards.
 
-# def fslookup(
-#     fname=None,
-#     sdate=None,
-#     edate=None,
-#     minSize=None,
-#     maxSize=None,
-#     dtype=None,
-#     perms=None,
-#     path=None,
-# ):
-#     print("Performed File Lookup with the followwing params:")
-#     print(locals())
+Command Structure:
+{searcher} [query] [flag] [query] [flag] [query] ...
+
+Available Flags:
+
+-t | --text: "-t [searchtext]"
+    Text to search for. Can be exact string ("cat.jpg") or wildcard ("*.xlsx"; "dog.*"; "*2024*").
+    If searcher is called without flags, the input will be interpreted as search text.
+
+    
+
+-d | --date: "-d [startdate]~[enddate]
+    Specify a date range. Dates should be in YYYY-MM-DD-HH:MM:SS format, and should always include the '~' 
+    character. Leave off the start or end for an open-ended search.
+
+-y | --datatype: "-y [datatype]
+    Specify a data type string to search for files containing certain types of data. This uses the linux "file"
+    tool, which can be somewhat verbose in its responses, so it's probably a good idea to wrap your query in **.
+
+-s | --size: "-s [minsize]:[maxsize]
+    Specify a size range to exclude results based on size. Sizes must be specified in bytes and always include 
+    a ":". Leave off the min or max for open-ended searching.
+
+-p | --permissions: "-p [permission#]
+    Specify a 3-digit permissions flag to return only files with that exact flag.
+
+-l | --location: "-l [filepath]
+    Specify a filepath to only searcnh for files in that directory. Use a wildcard to find files in subdirectories 
+    ("/path/to/*" can find a file in "/path/to/my/folder/").
+
+-h | --help:
+    Display this message.
+
+
+
+"""
 
 
 # Date to unix function
@@ -120,6 +147,9 @@ cmds = cmds[1:] + [""]
 # query = {"file_lib": library}
 query = {}
 flag = ""
+if cmds[0] == "":
+    print("Please specify a search term, or use --help for more information.")
+    quit()
 if cmds[0][0] != "-":
     query["fname"] = cmds[0]
     cmds = cmds[1:]
@@ -181,7 +211,7 @@ for word in cmds:
             case "-l" | "--location":
                 query["path"] = word
             case "-h" | "--help":
-                print("Help text here.")
+                print(HELPTEXT)
                 quit()
             case _:
                 print(
@@ -194,5 +224,5 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
-#dict_2_table(results)
-print(results) #fix this Josh
+# dict_2_table(results)
+print(results)  # fix this Josh
