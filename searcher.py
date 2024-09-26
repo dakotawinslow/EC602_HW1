@@ -1,6 +1,10 @@
 import sys
 import os
 import datetime as dt
+import database_searcher as ds
+
+#calling directory object from flattened directory
+library = database_searcher.searcher_obj()
 
 # import time as tme
 
@@ -18,11 +22,29 @@ import datetime as dt
 #     print(locals())
 
 
-# Date functions
+# Date to unix function
 def string2unix(date_string, format_string):
     date_time = dt.datetime.strptime(date_string, format_string)
     return int(date_time.timestamp())
 
+#Nake dictionary to readable table function
+def dict_2_table(library):
+    # Get dictionary keys as headers
+    headers = library.keys()
+
+    # Find the maximum width for each column (header or content)
+    col_widths = {header: max(len(str(header)), max(len(str(item)) for item in library[header])) for header in headers}
+
+    # Format string for each row adjusting the widths
+    row_format = " | ".join(["{{:<{}}}".format(col_widths[header]) for header in headers])
+
+    # print header row
+    print(row_format.format(*headers))
+    print("-" * (sum(col_widths.values()) + 3 * (len(headers) - 1)))  # Separator line
+
+    # Print the data rows
+    for row in zip(*library.values()):
+        print(row_format.format(*row))
 
 def fslookup(
     file_lib,
@@ -163,4 +185,4 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
-print(results)
+dict_2_table(results)
