@@ -28,13 +28,13 @@ def string2unix(date_string, format_string):
 
 
 # Nake dictionary to readable table function
-def dict_2_table(library):
+def dict_2_table(dict_lib):
     # Get dictionary keys as headers
-    headers = library.keys()
+    headers = dict_lib.keys()
 
     # Find the maximum width for each column (header or content)
     col_widths = {
-        header: max(len(str(header)), max(len(str(item)) for item in library[header]))
+        header: max(len(str(header)), max(len(str(item)) for item in dict_lib[header]))
         for header in headers
     }
 
@@ -48,7 +48,7 @@ def dict_2_table(library):
     print("-" * (sum(col_widths.values()) + 3 * (len(headers) - 1)))  # Separator line
 
     # Print the data rows
-    for row in zip(*library.values()):
+    for row in zip(*dict_lib.values()):
         print(row_format.format(*row))
 
 
