@@ -81,7 +81,7 @@ def fslookup(
     return search_lib  # changed back to returning just the list of dicts DW
 
 
-# commands
+# parser
 
 cmds = sys.argv
 # cmds = ["homework", "-s", ""]
@@ -147,7 +147,7 @@ for word in cmds:
                     )
                     quit()
                 query["perms"] = word
-            case "-d" | "--directorypath":
+            case "-l" | "--location":
                 query["path"] = word
             case "-h" | "--help":
                 print("Help text here.")
