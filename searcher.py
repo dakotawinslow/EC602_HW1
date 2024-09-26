@@ -3,9 +3,6 @@ import os
 import datetime as dt
 import database_searcher as ds
 
-#calling directory object from flattened directory
-library = ds.searcher_obj()
-
 # import time as tme
 
 # def fslookup(
@@ -27,16 +24,22 @@ def string2unix(date_string, format_string):
     date_time = dt.datetime.strptime(date_string, format_string)
     return int(date_time.timestamp())
 
-#Nake dictionary to readable table function
+
+# Nake dictionary to readable table function
 def dict_2_table(library):
     # Get dictionary keys as headers
     headers = library.keys()
 
     # Find the maximum width for each column (header or content)
-    col_widths = {header: max(len(str(header)), max(len(str(item)) for item in library[header])) for header in headers}
+    col_widths = {
+        header: max(len(str(header)), max(len(str(item)) for item in library[header]))
+        for header in headers
+    }
 
     # Format string for each row adjusting the widths
-    row_format = " | ".join(["{{:<{}}}".format(col_widths[header]) for header in headers])
+    row_format = " | ".join(
+        ["{{:<{}}}".format(col_widths[header]) for header in headers]
+    )
 
     # print header row
     print(row_format.format(*headers))
@@ -45,6 +48,7 @@ def dict_2_table(library):
     # Print the data rows
     for row in zip(*library.values()):
         print(row_format.format(*row))
+
 
 def fslookup(
     file_lib,
@@ -109,7 +113,9 @@ cmds = sys.argv
 # cmds = ["homework", "-s", ""]
 cmds = cmds[1:] + [""]
 # quit()
-query = {}
+# calling directory object from flattened directory
+library = ds.searcher_obj()
+query = {"file_lib": library}
 flag = ""
 if cmds[0][0] != "-":
     query["fname"] = cmds[0]
