@@ -4,7 +4,7 @@ import datetime as dt
 import database_searcher as ds
 
 #calling directory object from flattened directory
-library = database_searcher.searcher_obj()
+library = ds.searcher_obj()
 
 # import time as tme
 
