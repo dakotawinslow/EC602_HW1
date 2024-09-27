@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 import sys
-
-# import os
+import os
 import datetime as dt
 
 import database_searcher as ds
@@ -222,9 +220,11 @@ for word in cmds:
 results = fslookup(**query)
 dates = []
 for stamp in results["date"]:
-    print(type(dt.datetime.fromtimestamp(stamp)))
     dates.append(dt.datetime.fromtimestamp(stamp).strftime("%Y-%m-%d"))
 results["date"] = dates
-print(results["date"])
+paths = []
+for path in results["path"]:
+    paths.append(os.path.split(path)[0])
+results["path"] = paths
 dict_2_table(results)
 # print(results)  # fix this Josh
