@@ -20,7 +20,7 @@ Available Flags:
     If searcher is called without flags, the input will be interpreted as search text.
 
 -d | --date: "-d [startdate]~[enddate]
-    Specify a date range. Dates should be in YYYY-MM-DD-HH:MM:SS format, and should always include the '~' 
+    Specify a date range. Dates should be in %Y-%m-%d-%H:%M:%S format, and should always include the '~' 
     character. Leave off the start or end for an open-ended search.
 
 -y | --datatype: "-y [datatype]
@@ -45,7 +45,11 @@ Available Flags:
 
 # Date to unix function
 def string2unix(date_string, format_string):
-    date_time = dt.datetime.strptime(date_string, format_string)
+    try:
+        date_time = dt.datetime.strptime(date_string, format_string)
+    except ValueError as e:
+        print(f"Improperly formatted date. Error: {e}")
+        quit()
     return int(date_time.timestamp())
 
 
@@ -160,13 +164,15 @@ for word in cmds:
                         "Date ranges must be entered as YYYY-MM-DD-HH:MM:SS~YYYY-MM-DD-HH:MM:SS. First or second date may be omitted for open ended search."
                     )
                     quit()
-                sdate = word.split()[0]
-                edate = word.split()[1]
+                sdate = word.split("~")[0]
+                edate = word.split("~")[1]
                 dt_format = "%Y-%m-%d-%H:%M:%S"
-                sdate2unix = string2unix(sdate, dt_format)
-                edate2unix = string2unix(edate, dt_format)
-                query["sdate"] = sdate2unix
-                query["edate"] = edate2unix
+                if sdate:
+                    sdate2unix = string2unix(sdate, dt_format)
+                    query["sdate"] = sdate2unix
+                if edate:
+                    edate2unix = string2unix(edate, dt_format)
+                    query["edate"] = edate2unix
             case "-s" | "--size":
                 # size should be in slice notation
                 # use bytes, maybe add kb, mb, gb in future
