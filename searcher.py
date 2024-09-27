@@ -3,7 +3,7 @@ import sys
 import os
 import datetime as dt
 
-# import database_searcher as ds
+import database_searcher as ds
 
 HELPTEXT = """
 Welcome to Searcher! 
@@ -137,13 +137,11 @@ def fslookup(
 # parser
 
 cmds = sys.argv
-# cmds = ["homework", "-s", ""]
 cmds = cmds[1:] + [""]
-# quit()
 # calling directory object from flattened directory
-# library = ds.searcher_obj()
-# query = {"file_lib": library}
-query = {}
+library = ds.searcher_obj()
+query = {"file_lib": library}
+# query = {}
 flag = ""
 if cmds[0] == "":
     print("Please specify a search term, or use --help for more information.")
@@ -215,6 +213,7 @@ for word in cmds:
                 print(
                     f"Unknown flag encountered: {flag}. See help page (-h or --help) for more information."
                 )
+                quit()
         flag = ""
     elif word == "":
         break
@@ -222,5 +221,5 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
-# dict_2_table(results)
-print(results)  # fix this Josh
+dict_2_table(results)
+# print(results)  # fix this Josh
