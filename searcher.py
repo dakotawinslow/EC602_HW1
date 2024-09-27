@@ -101,11 +101,14 @@ def fslookup(
             continue
 
         # Date Search
-        accessed_date = file_lib["date"][i]
+        accessed_date = string2unix(file_lib["date"][i])
+        sdate2unix = string2unix(sdate) if sdate else None
+        edate2unix = string2unix(edate) if edate else None
+
         # acc_dte2unix = string2unix(accessed_date, dt_format)
 
         if sdate or edate:
-            if (sdate and accessed_date < sdate) or (edate and accessed_date > edate):
+            if (sdate2unix and accessed_date < sdate2unix) or (edate2unix and accessed_date > edate2unix):
                 continue
 
         # dtype search
