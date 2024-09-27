@@ -1,4 +1,4 @@
-#!usr/bin/python3
+#!/usr/bin/env python3
 
 import sys
 import os
@@ -41,9 +41,6 @@ Available Flags:
 
 -h | --help:
     Display this message.
-
-
-
 """
 
 
