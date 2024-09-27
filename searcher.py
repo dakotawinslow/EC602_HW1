@@ -53,6 +53,16 @@ def string2unix(date_string, format_string):
     return int(date_time.timestamp())
 
 
+# Convert 3 digit octal numbers into permissions strings
+def octal_to_string(octal):
+    permission = ["---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"]
+    result = ""
+    # Iterate over each of the digits in octal
+    for digit in [int(n) for n in str(octal)]:
+        result += permission[digit]
+    return result
+
+
 # Nake dictionary to readable table function
 def dict_2_table(dict_lib):
     # Get dictionary keys as headers
@@ -223,7 +233,9 @@ for word in cmds:
                         e,
                     )
                     quit()
-                query["perm"] = word
+
+                permstr = octal_to_string(word)
+                query["perm"] = "-" + permstr
             case "-l" | "--location":
                 query["path"] = word
             case "-h" | "--help":
@@ -250,4 +262,3 @@ for path in results["path"]:
     paths.append(os.path.split(path)[0])
 results["path"] = paths
 dict_2_table(results)
-# print(results)  # fix this Josh
