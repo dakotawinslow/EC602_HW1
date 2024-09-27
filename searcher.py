@@ -103,7 +103,9 @@ def fslookup(
 
     # fname search
     for i in range(len(file_lib["fname"])):
-        if fname and file_lib["fname"][i] != fname:
+        #Looks for all matching keywords, case-insensitive
+        if fname and fname.lower() not in file_lib['fname'][i].lower():
+        #if fname and file_lib["fname"][i] != fname:
             continue
 
         # Date Search
