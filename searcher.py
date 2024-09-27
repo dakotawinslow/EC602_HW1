@@ -2,13 +2,17 @@
 import sys
 import os
 import datetime as dt
+import fnmatch
 
 import database_searcher as ds
 
 HELPTEXT = """
 Welcome to Searcher! 
 For easiest use, type 'searcher [query]', where query is any combination of alphanumeric characters
-and wildcards.
+and wildcards. **NOTE** If you do use wildcards, be sure to put the search query in quotes so it parses correctly.
+
+eg: searcher "*.py" 
+eg: searcher gitignore -l "/Home/user/Documents/*"
 
 Command Structure:
 {searcher} [query] [flag] [query] [flag] [query] ...
@@ -108,13 +112,14 @@ def fslookup(
 
     # Dictionary to be appended, returned and printed out
     search_lib = {"fname": [], "date": [], "size": [], "perm": [], "path": []}
-
     # moved date functions to parser section -DW
 
     # fname search
     for i in range(len(file_lib["fname"])):
         # Looks for all matching keywords, case-insensitive
-        if fname and fname.lower() not in file_lib["fname"][i].lower():
+        if fname and not fnmatch.fnmatch(
+            file_lib["fname"][i].lower(), fname.lower()
+        ):  # using fnmatch for wildcards
             # if fname and file_lib["fname"][i] != fname:
             continue
 
@@ -136,7 +141,9 @@ def fslookup(
                 continue
 
         # dtype search
-        if dtype and file_lib["dtype"][i] != dtype:
+        if dtype and not fnmatch.fnmatch(
+            file_lib["dtype"][i], dtype
+        ):  # using fnmatch for wildcards
             continue
 
         # File Size Search
@@ -149,9 +156,10 @@ def fslookup(
             continue
 
         # Path search
-        if path and file_lib["path"][i] != path:
+        # if path and file_lib["path"][i] != path:  # Modified to use fnmatch, which parses wildcards correctly
+        #     continue
+        if path and not fnmatch.fnmatch(file_lib["path"][i], path):
             continue
-
         # Collect file info and compile into search-lib dictionary
         search_lib["fname"].append(file_lib["fname"][i])
         search_lib["date"].append(file_lib["date"][i])
@@ -253,6 +261,7 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
+query.pop("file_lib")
 dates = []
 for stamp in results["date"]:
     dates.append(dt.datetime.fromtimestamp(stamp).strftime("%Y-%m-%d"))
