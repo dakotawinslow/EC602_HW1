@@ -42,6 +42,9 @@ Available Flags:
     Specify a filepath to only searcnh for files in that directory. Use a wildcard to find files in subdirectories 
     ("/path/to/*" can find a file in "/path/to/my/folder/").
 
+-v | --verbose
+    Add this tag for verbose output, including all the information that can be searched on.    
+
 -h | --help:
     Display this message.
 """
