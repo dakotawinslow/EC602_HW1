@@ -19,8 +19,6 @@ Available Flags:
     Text to search for. Can be exact string ("cat.jpg") or wildcard ("*.xlsx"; "dog.*"; "*2024*").
     If searcher is called without flags, the input will be interpreted as search text.
 
-    
-
 -d | --date: "-d [startdate]~[enddate]
     Specify a date range. Dates should be in YYYY-MM-DD-HH:MM:SS format, and should always include the '~' 
     character. Leave off the start or end for an open-ended search.
@@ -203,7 +201,7 @@ for word in cmds:
                     perms = int(word)
                 except ValueError as e:
                     print(
-                        f"Permissions should be a 3-digit integer. See help for more information. ValueError:",
+                        f"Permissions should be a 3-digit integer. See --help for more information. ValueError:",
                         e,
                     )
                     quit()
