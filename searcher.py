@@ -45,6 +45,7 @@ Available Flags:
 -h | --help:
     Display this message.
 """
+VERBOSE = False
 
 
 # Date to unix function
@@ -249,6 +250,8 @@ for word in cmds:
             case "-h" | "--help":
                 print(HELPTEXT)
                 quit()
+            case "-v" | "--verbose":
+                VERBOSE = True
             case _:
                 print(
                     f"Unknown flag encountered: {flag}. See help page (-h or --help) for more information."
@@ -257,7 +260,7 @@ for word in cmds:
         flag = ""
     elif word == "":
         break
-    if word[0] == "-":
+    if word and word[0] == "-":
         flag = word
 
 results = fslookup(**query)
@@ -270,4 +273,8 @@ paths = []
 for path in results["path"]:
     paths.append(os.path.split(path)[0])
 results["path"] = paths
-dict_2_table(results)
+if VERBOSE:
+    dict_2_table(results)
+else:
+    for item in results["fname"]:
+        print(item)
