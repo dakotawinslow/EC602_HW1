@@ -56,7 +56,13 @@ def string2unix(date_string, format_string):
 # Nake dictionary to readable table function
 def dict_2_table(dict_lib):
     # Get dictionary keys as headers
+
     headers = dict_lib.keys()
+
+    # Message to display when the search returns no results
+    if len(dict_lib[list(headers)[0]]) == 0:
+        print("No Results Found.")
+        quit()
 
     # Find the maximum width for each column (header or content)
     col_widths = {
@@ -101,14 +107,20 @@ def fslookup(
             continue
 
         # Date Search
-        accessed_date = string2unix(file_lib["date"][i])
-        sdate2unix = string2unix(sdate) if sdate else None
-        edate2unix = string2unix(edate) if edate else None
+        accessed_date = file_lib["date"][i]
+
+        # accessed_date = string2unix(file_lib["date"][i])
+        # sdate2unix = string2unix(sdate) if sdate else None
+        # edate2unix = string2unix(edate) if edate else None
 
         # acc_dte2unix = string2unix(accessed_date, dt_format)
 
         if sdate or edate:
-            if (sdate2unix and accessed_date < sdate2unix) or (edate2unix and accessed_date > edate2unix):
+            # if (sdate2unix and accessed_date < sdate2unix) or (
+            #     edate2unix and accessed_date > edate2unix
+            # ):
+            if (sdate and accessed_date < sdate) or (edate and accessed_date > edate):
+
                 continue
 
         # dtype search
