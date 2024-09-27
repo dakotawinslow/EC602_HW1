@@ -37,7 +37,8 @@ def fslookup(file_lib, fname=None, sdate=None, edate=None, maxSize=None, minSize
 
     # fname search
     for i in range(len(file_lib['fname'])):
-        if fname and file_lib['fname'][i] != fname:
+        if fname and fname.lower() not in file_lib['fname'][i].lower():
+        #if fname and file_lib['fname'][i] != fname:
             continue
 
     # Date Search
