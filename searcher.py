@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-import os
+
+# import os
 import datetime as dt
 
 import database_searcher as ds
@@ -219,5 +220,11 @@ for word in cmds:
         flag = word
 
 results = fslookup(**query)
+dates = []
+for stamp in results["date"]:
+    print(type(dt.datetime.fromtimestamp(stamp)))
+    dates.append(dt.datetime.fromtimestamp(stamp).strftime("%Y-%m-%d"))
+results["date"] = dates
+print(results["date"])
 dict_2_table(results)
 # print(results)  # fix this Josh
