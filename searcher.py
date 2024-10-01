@@ -1,3 +1,7 @@
+# Copyright 2024 Dakota Winslow winslowd@bu.edu
+# Copyright 2024 Devin Kot-Thompson devinkt@bu.edu
+# Copyright 2024 Chih Han "Josh" Yeh jy0825@bu.edu
+
 #!/usr/bin/env python3
 import sys
 import os
